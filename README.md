@@ -30,3 +30,7 @@ In PROD mode, only WARN and INFO message can be displayed.
 - In DEV mode, any error pauses the execution and switches MATLAB to debug mode.
 
 - The FATAL message includes a logical expression whose execution is skipped in PROD mode.
+
+EXAMPLE:
+
+>> devel.example
