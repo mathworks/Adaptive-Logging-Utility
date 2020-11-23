@@ -16,16 +16,22 @@ NEEDS:
 SOLUTION:
 
 - A log level is defined that follows the Log4j log levels: OFF/FATAL/ERROR/WARN/INFO/DEBUG/TRACE
-Reference: https://en.wikipedia.org/wiki/Log4j
+
+  Reference: https://en.wikipedia.org/wiki/Log4j
 
 - A environment mode is defined that follows the Development, Testing, Acceptance and Production (DTAP) standard with the 4 following environment modes: DEV/TEST/UAT/PROD
-Reference: https://en.wikipedia.org/wiki/Development,_testing,_acceptance_and_production
+
+  Reference: https://en.wikipedia.org/wiki/Development,_testing,_acceptance_and_production
 
 - The log level is automatically adjusted according to the environment mode.
-Examples:
-If the log level is WARN, then all FATAL, ERROR and WARN messages are enabled.
-In UAT mode, the minimal log level is WARN. So the log level cannot be set to OFF, FATAL or ERROR.
-In PROD mode, only WARN and INFO message can be displayed.
+
+  Examples:
+  
+  If the log level is WARN, then all FATAL, ERROR and WARN messages are enabled.
+  
+  In UAT mode, the minimal log level is WARN. So the log level cannot be set to OFF, FATAL or ERROR.
+  
+  In PROD mode, only WARN and INFO message can be displayed.
 
 - In DEV mode, any error pauses the execution and switches MATLAB to debug mode.
 
