@@ -3,7 +3,7 @@ classdef Check
     % Copyright 2020 The MathWorks, Inc.
     
     properties (Constant, Access=private)
-        TEMPDIR_FILES_MAX = 1000
+        TEMPDIR_FILES_MAX = 5000
         RAM_MIN = 1024^3 % bytes
     end
     

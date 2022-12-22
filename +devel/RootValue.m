@@ -1,23 +1,13 @@
 classdef RootValue
-    
-    % Copyright 2019-2020 The MathWorks, Inc.
-    
-    enumeration
-        % Declare your VALUES identifiers here
-        
-        DUMMY_LABEL
-        
-        % SCENE specific
-        
-        ANIMATION_STYLER
-        ITEM_STYLER
-        SCENARIO_CLOSED_LISTENER_TOKEN
-    end
+    % Root values identifiers must be declared in an enumeration class
+    % named "DevelRootValue", see the example in DevelRootValue_example.m
+
+    % Copyright 2019-2022 The MathWorks, Inc.
     
     methods (Static)
         function retB = isDefined(flag)
             arguments
-                flag (1,1) devel.RootValue
+                flag (1,1) DevelRootValue
             end
             root = groot;
             retB = isfield(root.UserData, char(flag));
@@ -25,7 +15,7 @@ classdef RootValue
         
         function value = get(flag)
             arguments
-                flag (1,1) devel.RootValue
+                flag (1,1) DevelRootValue
             end
             value = nan;
             root = groot;
@@ -37,7 +27,7 @@ classdef RootValue
         
         function set(flag, value)
             arguments
-                flag (1,1) devel.RootValue
+                flag (1,1) DevelRootValue
                 value
             end
             root = groot;

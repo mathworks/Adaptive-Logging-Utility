@@ -1,6 +1,6 @@
 classdef Env
     
-    % Copyright 2020 The MathWorks, Inc.
+    % Copyright 2020-2022 The MathWorks, Inc.
     
     enumeration
         DEV   % Development
@@ -45,7 +45,7 @@ classdef Env
             
             if (mode==devel.Env.DEV) && devel.Env.IS_PCODED
                 devel.Log.warn('DEV mode unavailable with pcoded software');
-                return;
+                return
             end
             
             devel.Env.getSetMode(mode);
@@ -54,17 +54,17 @@ classdef Env
             % different minimal log level
             devel.Log.setLevel(devel.Log.getLevel());
         end
-                
+        
         function enableBatch()
-            devel.RootFlag.set(devel.RootFlag.BATCH_MODE);
+            devel.RootFlag.set('BATCH_MODE');
         end
         
         function disableBatch()
-            devel.RootFlag.clear(devel.RootFlag.BATCH_MODE);
+            devel.RootFlag.clear('BATCH_MODE');
         end
         
         function retB = isBatch()
-            retB = devel.RootFlag.get(devel.RootFlag.BATCH_MODE);
+            retB = batchStartupOptionUsed || devel.RootFlag.get('BATCH_MODE');
         end
     end
     

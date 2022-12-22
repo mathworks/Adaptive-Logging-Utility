@@ -1,11 +1,11 @@
 classdef Base
     
-    % Copyright 2020 The MathWorks, Inc.
+    % Copyright 2020-2021 The MathWorks, Inc.
     
     methods (Static)
         function pushDir(folderS)
             arguments
-                folderS {devel.Check.mustBeAString(folderS)}
+                folderS (1,1) string
             end
             if startsWith(folderS, filesep) || contains(folderS, ':')
                 targetS = folderS;
@@ -20,7 +20,7 @@ classdef Base
         function popDir()
             folderS = devel.Base.getSetDir();
             if folderS==""
-                return;
+                return
             end
             devel.Log.fatal(@()(exist(folderS, 'dir')==7), "Folder not found: "+folderS);
             cd(folderS);
@@ -31,7 +31,7 @@ classdef Base
         function folderS = getSetDir(folderS)
             % used by pushDir() and popDir()
             arguments
-                folderS (1,1) {devel.Check.mustBeAString(folderS)} = ""
+                folderS (1,1) string = ""
             end
             
             persistent folderStackS
