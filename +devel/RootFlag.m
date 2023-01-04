@@ -1,21 +1,21 @@
 classdef RootFlag
     % Root flags identifiers must be declared in an enumeration class
     % named "DevelFlagValue", see the example in DevelFlagValue_example.m
-
-    % Copyright 2016-2021 The MathWorks, Inc.
-
+    
+    % Copyright 2016-2023 The MathWorks, Inc.
+    
     methods (Static)
-        function retB = isDefined(flag)
+        function retB = isDefined(flagS)
             arguments
-                flag (1,1) DevelRootFlag
+                flagS (1,1) string
             end
             root = groot;
-            retB = isfield(root.UserData, char(flag));
+            retB = isfield(root.UserData, flagS);
         end
-
-        function valueB = get(flag)
+        
+        function valueB = get(flagS)
             arguments
-                flag (1,1) DevelRootFlag
+                flagS (1,1) string = string(DevelRootFlag.UNDEF)
             end
             valueB = false;
             if ~nargin
@@ -24,29 +24,28 @@ classdef RootFlag
                 return
             end
             root = groot;
-            nameC = char(flag);
-            if isfield(root.UserData, nameC)
-                valueB = root.UserData.(nameC);
+            if isfield(root.UserData, flagS)
+                valueB = root.UserData.(flagS);
             end
         end
-
-        function set(flag, valueB)
+        
+        function set(flagS, valueB)
             arguments
-                flag (1,1) DevelRootFlag
+                flagS (1,1) string
                 valueB (1,1) logical = true
             end
             root = groot;
-            root.UserData.(char(flag)) = valueB;
+            root.UserData.(flagS) = valueB;
         end
-
-        function clear(flag)
+        
+        function clear(flagS)
             arguments
-                flag (1,1) DevelRootFlag
+                flagS (1,1) string
             end
             root = groot;
-            root.UserData.(char(flag)) = false;
+            root.UserData.(flagS) = false;
         end
-
+        
         function reset()
             arrayfun(@(x) devel.RootFlag.clear(x), enumeration('DevelRootFlag'));
         end

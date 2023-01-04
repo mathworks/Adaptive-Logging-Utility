@@ -1,37 +1,36 @@
 classdef RootValue
     % Root values identifiers must be declared in an enumeration class
     % named "DevelRootValue", see the example in DevelRootValue_example.m
-
-    % Copyright 2019-2022 The MathWorks, Inc.
+    
+    % Copyright 2019-2023 The MathWorks, Inc.
     
     methods (Static)
-        function retB = isDefined(flag)
+        function retB = isDefined(flagS)
             arguments
-                flag (1,1) DevelRootValue
+                flagS (1,1) string
             end
             root = groot;
-            retB = isfield(root.UserData, char(flag));
+            retB = isfield(root.UserData, flagS);
         end
         
-        function value = get(flag)
+        function value = get(flagS)
             arguments
-                flag (1,1) DevelRootValue
+                flagS (1,1) string
             end
             value = nan;
             root = groot;
-            nameC = char(flag);
-            if isfield(root.UserData, nameC)
-                value = root.UserData.(nameC);
+            if isfield(root.UserData, flagS)
+                value = root.UserData.(flagS);
             end
         end
         
-        function set(flag, value)
+        function set(flagS, value)
             arguments
-                flag (1,1) DevelRootValue
+                flagS (1,1) string
                 value
             end
             root = groot;
-            root.UserData.(char(flag)) = value;
+            root.UserData.(flagS) = value;
         end
     end
 end
