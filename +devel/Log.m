@@ -26,7 +26,9 @@ classdef Log < Simulink.IntEnumType
                 isa(level, 'devel.Log') && ismember(level, enumeration('devel.Log')), ...
                 'Invalid log level');
             
-            % enforce a minimal value in case of log level
+            % Enforce a minimal value in case of log level.
+            % This code is mirrored in
+            % scenePrefsUI.mlapp/LOG_LEVELValueChanged()
             if devel.Env.isDEV()
                 % DEV
                 level = devel.Log(max(level, devel.Log.WARN));
@@ -45,13 +47,13 @@ classdef Log < Simulink.IntEnumType
             % fatal triggered if condition is false
             if devel.Env.isPROD() || (devel.Log.getSetLevel()<devel.Log.FATAL)
                 % PROD
-                return;
+                return
             end
             
             assert(isa(conditionH, 'function_handle'), 'Invalid 1st argument');
             
             if conditionH()
-                return;
+                return
             end
             
             assert(ischar(message)||isstring(message), 'Invalid message type');
@@ -74,7 +76,7 @@ classdef Log < Simulink.IntEnumType
         function error(varargin)
             if devel.Env.isPROD() || (devel.Log.getSetLevel()<devel.Log.ERROR)
                 % PROD
-                return;
+                return
             end
             pattern = repmat('%s\n', [1, numel(varargin)]);
             pattern = pattern(1:end-2);
@@ -101,7 +103,7 @@ classdef Log < Simulink.IntEnumType
         
         function errorDlg(messageC, titleC)
             if devel.Env.isBatch()
-                return;
+                return
             end
             if nargin<2
                 titleC = 'ERROR';
@@ -111,7 +113,7 @@ classdef Log < Simulink.IntEnumType
         
         function warn(varargin)
             if devel.Log.getSetLevel()<devel.Log.WARN
-                return;
+                return
             end
             pattern = repmat('%s\n', [1, numel(varargin)]);
             pattern = pattern(1:end-2);
@@ -123,7 +125,7 @@ classdef Log < Simulink.IntEnumType
         
         function warnDlg(messageC, titleC)
             if devel.Env.isBatch()
-                return;
+                return
             end
             if nargin<2
                 titleC = 'WARNING';
@@ -134,7 +136,7 @@ classdef Log < Simulink.IntEnumType
         
         function info(varargin)
             if devel.Log.getSetLevel()<devel.Log.INFO
-                return;
+                return
             end
             % DEV TEST UAT PROD
             pattern = repmat('%s\n', [1,numel(varargin)]);
@@ -143,7 +145,7 @@ classdef Log < Simulink.IntEnumType
         
         function infoDlg(messageC, titleC)
             if devel.Env.isBatch()
-                return;
+                return
             end
             if nargin<2
                 titleC = 'INFO';
@@ -157,24 +159,32 @@ classdef Log < Simulink.IntEnumType
         end
         
         function debug(varargin)
-            if ~devel.Env.isDEV() || (devel.Log.getSetLevel()<devel.Log.DEBUG)
-                % TEST UAT PROD
-                return;
+            if (~devel.Env.isDEV() && ~devel.Env.isUAT()) || ...
+                    (devel.Log.getSetLevel()<devel.Log.DEBUG)
+                % TEST PROD
+                return
             end
-            % DEV
+            % DEV UAT
             pattern = repmat('%s\n', [1,numel(varargin)]);
             fprintf(1, ['[%i] ', pattern], devel.Log.getCounter, varargin{:});
         end
         
         function trace(tagC, messageC)
-            if ~devel.Env.isDEV() || (devel.Log.getSetLevel()<devel.Log.TRACE)
-                % TEST UAT PROD
-                return;
+            if (~devel.Env.isDEV() && ~devel.Env.isUAT()) || ...
+                    (devel.Log.getSetLevel()<devel.Log.TRACE)
+                % TEST PROD
+                return
             end
-            % DEV
+            % DEV UAT
             fprintf(devel.Log.getTraceFID(), ...
                 ['[%i][%s] %s', newline], ...
                 devel.Log.getCounter, tagC, messageC);
+        end
+        
+        function openTrace()
+            cacheFolderC = Simulink.fileGenControl('get', 'CacheFolder');
+            traceFullPathC = fullfile(cacheFolderC, 'trace.log');
+            winopen(traceFullPathC);
         end
     end
     
@@ -183,6 +193,7 @@ classdef Log < Simulink.IntEnumType
             persistent storedLevel
             if nargin
                 storedLevel = newLevel;
+                scene.Prefs.write('LOG_LEVEL', char(storedLevel));
             elseif isempty(storedLevel)
                 if devel.Env.isDEV()
                     % DEV
@@ -194,6 +205,7 @@ classdef Log < Simulink.IntEnumType
                     % TEST UAT
                     storedLevel = devel.Log.INFO;
                 end
+                scene.Prefs.write('LOG_LEVEL', char(storedLevel));
             end
             currentLevel = storedLevel;
         end
@@ -209,7 +221,7 @@ classdef Log < Simulink.IntEnumType
             value = counter;
         end
         
-        function fidOut = getTraceFID()
+        function [fidOut, traceFullPathC] = getTraceFID()
             persistent fid
             % check the fid validity
             try
@@ -221,7 +233,8 @@ classdef Log < Simulink.IntEnumType
                 % open or create the trace file for writing
                 % append data to the end of the file
                 cacheFolderC = Simulink.fileGenControl('get', 'CacheFolder');
-                fid = fopen(fullfile(cacheFolderC, 'trace.log'), 'a');
+                traceFullPathC = fullfile(cacheFolderC, 'trace.log');
+                fid = fopen(traceFullPathC, 'a');
             end
             fidOut = fid;
         end
