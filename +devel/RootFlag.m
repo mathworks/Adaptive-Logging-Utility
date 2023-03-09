@@ -1,6 +1,6 @@
 classdef RootFlag
     % Root flags identifiers must be declared in an enumeration class
-    % named "DevelFlagValue", see the example in DevelFlagValue_example.m
+    % named "DevelRootFlag", see the example in DevelRootFlag_example.m
     
     % Copyright 2016-2023 The MathWorks, Inc.
     
