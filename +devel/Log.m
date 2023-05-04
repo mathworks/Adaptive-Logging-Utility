@@ -159,23 +159,21 @@ classdef Log < Simulink.IntEnumType
         end
         
         function debug(varargin)
-            if (~devel.Env.isDEV() && ~devel.Env.isUAT()) || ...
-                    (devel.Log.getSetLevel()<devel.Log.DEBUG)
-                % TEST PROD
+            if devel.Env.isPROD() || (devel.Log.getSetLevel()<devel.Log.DEBUG)
+                % PROD
                 return
             end
-            % DEV UAT
+            % DEV UAT TEST
             pattern = repmat('%s\n', [1,numel(varargin)]);
             fprintf(1, ['[%i] ', pattern], devel.Log.getCounter, varargin{:});
         end
-        
+
         function trace(tagC, messageC)
-            if (~devel.Env.isDEV() && ~devel.Env.isUAT()) || ...
-                    (devel.Log.getSetLevel()<devel.Log.TRACE)
-                % TEST PROD
+            if devel.Env.isPROD() || (devel.Log.getSetLevel()<devel.Log.TRACE)
+                % PROD
                 return
             end
-            % DEV UAT
+            % DEV UAT TEST
             fprintf(devel.Log.getTraceFID(), ...
                 ['[%i][%s] %s', newline], ...
                 devel.Log.getCounter, tagC, messageC);
