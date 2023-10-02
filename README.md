@@ -1,6 +1,8 @@
 # Adaptive-Logging-Utility
 Logging and environment utilities for MATLAB coding
 
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=mathworks/Adaptive-Logging-Utility)
+
 NEEDS:
 
 1. I want to be able to choose the amount of information displayed in the MATLAB Command Window during the execution of a MATLAB software.
